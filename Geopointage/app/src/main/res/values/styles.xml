@@ -1,0 +1,53 @@
+<resources>
+
+<!-- Base application theme. -->
+<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Customize your theme here.
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>-->
+    <item name="android:navigationBarColor">?android:attr/colorPrimaryDark</item>
+</style>
+
+<style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    <item name="android:windowBackground">@color/mainBackground</item>
+    <item name="android:colorAccent">@color/colorAccent</item>
+</style>
+
+<style name="ToolbarColoredBackArrow" parent="AppTheme">
+    <item name="android:textColorSecondary">@color/White</item>
+    <item name="android:textColorPrimary">@color/White</item>
+</style>
+
+<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+<style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+    <item name="android:textColor">@color/Black</item>
+    <item name="android:textSize">18sp</item>
+</style>
+
+
+<style name="TextInputLayoutUnderlineColor">
+    <item name="colorControlNormal">#ffffff</item>
+</style>
+
+<style name="TextInputLayoutUnderlineColorBlack">
+    <item name="colorControlNormal">@color/Black</item>
+</style>
+
+<style name="myDialog" parent="AppTheme.NoActionBar">
+    <item name="android:windowNoTitle">true</item>
+</style>
+
+<style name="Dialog_Login" parent="Theme.AppCompat.Dialog">
+    <item name="colorAccent">@color/White</item>
+    <item name="android:textColorPrimary">@color/mainBackground</item>
+    <item name="android:background">@color/colorPrimary</item>
+</style>
+
+</resources>
