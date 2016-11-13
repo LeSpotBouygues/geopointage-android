@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import sm20_corp.geopointage.Module.DatabaseHandler;
 import sm20_corp.geopointage.R;
 
 /**
@@ -20,10 +21,14 @@ public class ChooseActivity extends AppCompatActivity {
     private TextView name;
     private Button button;
     private int choose;
+
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_choose);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose);
+
+
+        DatabaseHandler.getInstance(getApplicationContext()).getAllUser();
 
         Intent intent = getIntent();
         if (intent != null) {

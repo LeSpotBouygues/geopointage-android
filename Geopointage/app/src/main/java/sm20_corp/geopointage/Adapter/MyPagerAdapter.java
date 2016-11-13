@@ -30,14 +30,10 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
-                System.out.println("pos 0");
-
                 return RecentContactFragment.newInstance();
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                System.out.println("pos 1");
                 return AllContactFragment.newInstance();
             default:
-                System.out.println("null");
                 return null;
         }
     }
@@ -49,7 +45,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         if (position == 0)
             return ("Recent collaborateur");
         else
-            return ("Tous les collaborateur");
+            return ("Tous les collaborateurs");
 
     }
 

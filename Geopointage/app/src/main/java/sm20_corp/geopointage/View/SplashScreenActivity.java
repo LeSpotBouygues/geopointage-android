@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import sm20_corp.geopointage.Module.DatabaseHandler;
 import sm20_corp.geopointage.R;
 
 /**
@@ -38,6 +39,7 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        DatabaseHandler.getInstance(this).createChef();
 
             new Handler().postDelayed(new Runnable() {
                 //Showing splash screen with a timer.

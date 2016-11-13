@@ -8,12 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import sm20_corp.geopointage.Adapter.ContactAdapter;
 import sm20_corp.geopointage.Model.User;
+import sm20_corp.geopointage.Module.DatabaseHandler;
 import sm20_corp.geopointage.Module.RecyclerItemClickListener;
 import sm20_corp.geopointage.R;
+import sm20_corp.geopointage.View.ContactActivity;
+
 
 /**
  * Created by gun on 02/11/2016.
@@ -26,23 +27,10 @@ public class AllContactFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
     private ContactAdapter contactAdapter;
-    private ArrayList<User> arrayList = new ArrayList<User>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState)
-    {
-
-        System.out.println("hey2");
-
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.all_contact_fragment,container, false);
-        User user = new User("messara", "redouane" , "0630071074");
-        arrayList.add(user);
-        user = new User("evano", "coco" , "0123456789");
-        arrayList.add(user);
-        user = new User("boutin", "paul" , "0000000000");
-        arrayList.add(user);
-        arrayList.add(user); arrayList.add(user); arrayList.add(user); arrayList.add(user); arrayList.add(user); arrayList.add(user); arrayList.add(user); arrayList.add(user); arrayList.add(user);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.all_contact_fragment, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.all_contact_fragment_recycler_view_contact_all);
         // use this setting to improve performance if you know that changes
@@ -52,12 +40,29 @@ public class AllContactFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        contactAdapter = new ContactAdapter(arrayList, getActivity());
+        contactAdapter = new ContactAdapter(DatabaseHandler.getInstance(getActivity().getApplicationContext()).getAllUser(), 0, getActivity());
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        // TODO Handle item click
+                        User user;
+                        //0 = main activity
+                        //1 = chpse activity
+                        if (((ContactActivity) getActivity()).getChoose() == 0)
+                            ((ContactActivity) getActivity()).setArrayListCollaborateur(contactAdapter.getSelectedItem(position, 0));
+                        else {
+                            user = contactAdapter.getSelectedItem(position, 1).get(0);
+                            ((ContactActivity) getActivity()).setChef(user);
+                        }
+
+                        /*Intent i = new Intent(getActivity(), MainActivity.class);
+                        i.putExtra("userId", user.getId());
+                        startActivity(i);
+                        startActivity(i);*/
+
+
+                        contactAdapter.notifyDataSetChanged();
+
                     }
                 })
         );
@@ -82,9 +87,6 @@ public class AllContactFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
 
 
     }

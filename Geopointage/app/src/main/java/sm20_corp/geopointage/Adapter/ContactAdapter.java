@@ -1,12 +1,14 @@
 package sm20_corp.geopointage.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,22 +21,39 @@ import sm20_corp.geopointage.R;
  * Geopointage
  */
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable
-{
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable {
     private ArrayList<User> mDatasetAdapter;
     private ArrayList<User> mDatasetAdapterCopy;
     private Context mContext;
-
+    private int mOption = -1;
+    private ArrayList<Integer> posSelected = new ArrayList<Integer>();
+    ArrayList<User> users = new ArrayList<User>();
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ContactAdapter(ArrayList<User> myDataset, Context context) {
+    //option 0 = contactAtivity
+    //       1 = mainactivity
+
+    public ContactAdapter(ArrayList<User> myDataset, int option, Context context) {
         mContext = context;
-        mDatasetAdapter = new ArrayList<>(myDataset);
-        mDatasetAdapterCopy = new ArrayList<>(myDataset);
-       // this.filterDataset();
+        mOption = option;
+        if (myDataset != null) {
+            if (mOption == 1)
+            {
+                User tmp = new User("","","");
+                myDataset.add(tmp);
+            }
+            mDatasetAdapter = new ArrayList<>(myDataset);
+            mDatasetAdapterCopy = new ArrayList<>(myDataset);
+            // this.filterDataset();
+        }
+        else
+            mDatasetAdapter = new ArrayList<>();
     }
 
-    public int getSelectedItem(int position) {
+
+
+    public ArrayList<User> getSelectedItem(int position , int option) {
         String idSelected = mDatasetAdapter.get(position).getId();
+
         int pos = 0;
         for (int i = 0; i < mDatasetAdapterCopy.size(); i++) {
             if (mDatasetAdapterCopy.get(i).getId().equals(idSelected)) {
@@ -42,7 +61,34 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 break;
             }
         }
-        return (pos);
+        boolean find = false;
+        int i = 0;
+        if (option == 1)
+        {
+            posSelected.clear();
+        }
+        while (!posSelected.isEmpty() && i < posSelected.size()) {
+            if (posSelected.get(i) == pos) {
+                posSelected.remove(i);
+                users.remove(i);
+                find = true;
+            }
+            i++;
+        }
+        if (!find) {
+            posSelected.add(pos);
+            users.add(mDatasetAdapterCopy.get(pos));
+           // System.out.println("add = " + pos);
+        }
+
+        System.out.println("user size = " + users.size());
+        int y = 0;
+        while (!users.isEmpty() && y < users.size())
+        {
+            System.out.println("user last name = " + users.get(y).getLastName());
+            y++;
+        }
+        return (users);
     }
 
     @Override
@@ -54,7 +100,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     // Create new views (invoked by the layout manager)
     @Override
     public ContactAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                           int viewType) {
+                                                        int viewType) {
         // create a new view
 
         View v = LayoutInflater.from(parent.getContext())
@@ -70,11 +116,37 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         // - replace the contents of the view with that element
         //holder.date.setText(mDataset.get(position).getDate());
 
-        holder.lastName.setText(mDatasetAdapterCopy.get(position).getLastName());
-        holder.firstNname.setText(mDatasetAdapterCopy.get(position).getFirstName());
-        holder.id.setText(mDatasetAdapterCopy.get(position).getId());
 
 
+
+            holder.lastName.setText(mDatasetAdapterCopy.get(position).getLastName());
+            holder.firstNname.setText(mDatasetAdapterCopy.get(position).getFirstName());
+            holder.id.setText(mDatasetAdapterCopy.get(position).getId());
+
+
+            if (mOption == 1 && position == 0) {
+                holder.title.setVisibility(View.VISIBLE);
+                holder.title.setText(R.string.chef_chantier);
+            } else if (mOption == 1 && position == 1) {
+                holder.title.setVisibility(View.VISIBLE);
+                holder.title.setText(R.string.collaborateur);
+            } else
+                holder.title.setVisibility(View.GONE);
+            holder.cardViewUser.setCardBackgroundColor(mContext.getColor(R.color.White));
+
+
+            int i = 0;
+            while (!posSelected.isEmpty() && i < posSelected.size()) {
+                if (posSelected.get(i) == position) {
+                    holder.cardViewUser.setCardBackgroundColor(mContext.getColor(R.color.OrangeLight));
+                }
+                i++;
+
+            }
+      if (getItemCount() == position + 1 && mOption == 1){
+            holder.linearLayoutContact.setVisibility(View.GONE);
+            holder.linearLayoutAdd.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -90,18 +162,26 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        // public TextView date;
+        public TextView title;
         public TextView lastName;
         public TextView firstNname;
         public TextView id;
+        public CardView cardViewUser;
+        public LinearLayout linearLayoutContact;
+        public LinearLayout linearLayoutAdd;
+
 
         public ViewHolder(View v) {
             super(v);
-            //date = (TextView) v.findViewById(R.id.list_ticket_listview_textview_date);
 
+            title = (TextView) v.findViewById(R.id.adapter_contact_textView_title);
             lastName = (TextView) v.findViewById(R.id.adapter_contact_textView_last_name);
             firstNname = (TextView) v.findViewById(R.id.adapter_contact_textView_first_name);
             id = (TextView) v.findViewById(R.id.adapter_contact_textView_id);
+            cardViewUser = (CardView) v.findViewById(R.id.adapter_contact_card_view_list_user);
+            linearLayoutContact = (LinearLayout) v.findViewById(R.id.adapter_contact_linearlayout_contact);
+            linearLayoutAdd = (LinearLayout) v.findViewById(R.id.adapter_contact_linearlayout_add);
+
         }
     }
 

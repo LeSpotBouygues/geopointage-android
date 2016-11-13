@@ -8,4 +8,31 @@
     <string name="last_name">Nom</string>
     <string name="first_name">Prénom</string>
     <string name="id">id</string>
+
+    <!--Strings related to AddContactActivity -->
+
+    <string name="error_missing_champ">Tout les champs ne sont pas remplie</string>
+    <string name="lastname_and_firstname">Nom et Prénom</string>
+    <string name="identity">Identifiant</string>
+
+    <!--Strings related to MainActivity -->
+
+    <string name="chef_chantier">Chef de chantier</string>
+    <string name="collaborateur">Collaborateur</string>
+    <string name="guide">Me guider</string>
+    <string name="select_adress">Sélectionner une adresse</string>
+
+    <string name="no_adresse_select">Aucune adresse sélectioner</string>
+
+
+    <!--Strings related to ContactAdapter -->
+    <string name="selecte_collaborateur">Sélectionner les collaborateurs</string>
+    <string name="ajout_collaborateur">Ajout un collaborateur</string>
+
+    <!--Strings related to ContactActivity -->
+    <string name="error_select_user">Aucune personne sélectionner</string>
+
+
+
+
 </resources>

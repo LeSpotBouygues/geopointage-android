@@ -13,13 +13,48 @@
     tools:context="sm20_corp.geopointage.View.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EEEEEE"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_adresse_select"
+            android:id="@+id/content_main_textview_adresse" />
+
+            <Button
+                android:text="@string/guide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/content_main_button_guider" />
+
+            <Button
+                android:text="@string/selecte_collaborateur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/content_main_button_select_colaborateur" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/content_main_recycler_view_colaborateur"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:overScrollMode="never" />
+
+        </LinearLayout>
 
 
-     <com.github.clans.fab.FloatingActionMenu
+        <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/app_bar_main_fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,8 +65,8 @@
         app:menu_animationDelayPerItem="50"
         app:menu_backgroundColor="@android:color/transparent"
         app:menu_buttonSpacing="0dp"
-        app:menu_colorNormal="@color/colorAccent"
-        app:menu_colorPressed="#E75043"
+        app:menu_colorNormal="@color/Orange"
+        app:menu_colorPressed="@color/OrangeLight"
         app:menu_colorRipple="#99FFFFFF"
         app:menu_fab_label=""
         app:menu_fab_size="normal"
@@ -62,5 +97,5 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
-
+    </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

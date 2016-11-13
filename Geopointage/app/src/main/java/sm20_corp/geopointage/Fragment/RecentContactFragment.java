@@ -36,12 +36,6 @@ public class RecentContactFragment extends Fragment {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.recent_contact_fragment,container, false);
 
-
-        User user = new User("messara", "redouane" , "0630071074");
-        arrayList.add(user);
-        arrayList.add(user);
-        arrayList.add(user);
-
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recent_contact_fragment_recycler_view_contact_recent);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -50,7 +44,7 @@ public class RecentContactFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        contactAdapter = new ContactAdapter(arrayList, getActivity());
+        contactAdapter = new ContactAdapter(arrayList,0, getActivity());
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
