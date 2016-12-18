@@ -16,7 +16,6 @@ import sm20_corp.geopointage.R;
 public class SplashScreenActivity extends Activity {
 
 
-
     //timer for splash screen in MS
     private final int SPLASH_TIME_OUT = 1000;
 
@@ -41,24 +40,29 @@ public class SplashScreenActivity extends Activity {
 
         DatabaseHandler.getInstance(this).createChef();
 
-            new Handler().postDelayed(new Runnable() {
-                //Showing splash screen with a timer.
+        new Handler().postDelayed(new Runnable() {
+            //Showing splash screen with a timer.
 
-                @Override
-                public void run() {
-                    // This method will be executed once the timer is over
-                    // Start app main activity
-                    if (SplashScreenActivity.isActivityVisible()) {
-                        // Show login screen
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                // Start app main activity
+                if (SplashScreenActivity.isActivityVisible()) {
+                    // Show login screen
+                    if (!DatabaseHandler.getInstance(getApplicationContext()).getChef().getId().equals("-1")) {
+                        Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
+                        startActivity(i);
+                    } else {
                         Intent i = new Intent(SplashScreenActivity.this, ChooseActivity.class);
                         i.putExtra("choose", 1);
                         startActivity(i);
                     }
-                    // close this activity
-                    finish();
                 }
-            }, SPLASH_TIME_OUT);
-        }
+                // close this activity
+                finish();
+            }
+        }, SPLASH_TIME_OUT);
+    }
 
 
     @Override

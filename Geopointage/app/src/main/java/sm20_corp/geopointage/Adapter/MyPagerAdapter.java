@@ -1,11 +1,13 @@
 package sm20_corp.geopointage.Adapter;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import sm20_corp.geopointage.Fragment.AllContactFragment;
 import sm20_corp.geopointage.Fragment.RecentContactFragment;
+import sm20_corp.geopointage.R;
 
 /**
  * Created by gun on 02/11/2016.
@@ -14,9 +16,10 @@ import sm20_corp.geopointage.Fragment.RecentContactFragment;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private static int NUM_ITEMS = 2;
-
-    public MyPagerAdapter(FragmentManager fragmentManager) {
+    private Context mContex;
+    public MyPagerAdapter(FragmentManager fragmentManager, Context context) {
         super(fragmentManager);
+        mContex = context;
     }
 
     // Returns total number of pages
@@ -43,9 +46,9 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
 
         if (position == 0)
-            return ("Recent collaborateur");
+            return (mContex.getResources().getString(R.string.recent_collaborateur));
         else
-            return ("Tous les collaborateurs");
+            return (mContex.getResources().getString(R.string.all_collaborateur));
 
     }
 

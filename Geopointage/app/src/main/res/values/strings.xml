@@ -11,28 +11,79 @@
 
     <!--Strings related to AddContactActivity -->
 
-    <string name="error_missing_champ">Tout les champs ne sont pas remplie</string>
+    <string name="error_missing_champ">Tous les champs ne sont pas remplis</string>
     <string name="lastname_and_firstname">Nom et Prénom</string>
     <string name="identity">Identifiant</string>
+    <string name="error_send_user">Probleme envoie du user</string>
+    <string name="error_network">Probleme reseaux</string>
+    <string name="send_user_ok">Nouveau collaborateur ajouter</string>
 
     <!--Strings related to MainActivity -->
 
     <string name="chef_chantier">Chef de chantier</string>
-    <string name="collaborateur">Collaborateur</string>
+    <string name="collaborateur">Equipe</string>
     <string name="guide">Me guider</string>
     <string name="select_adress">Sélectionner une adresse</string>
+    <string name="comment">Commentaire</string>
+    <string name="resum_of_activity">resumé de l\'activité</string>
 
-    <string name="no_adresse_select">Aucune adresse sélectioner</string>
-
+    <string name="no_adresse_select">Aucune adresse sélectionée</string>
+    <string name="logout">Deconnection</string>
+    <string name="error_send_tach">Probleme envoie des tâches</string>
+    <string name="send_tach_ok">Tâches envoié</string>
+    <string name="tach_found">Tâche trouvé</string>
+    <string name="resume">Reprendre</string>
 
     <!--Strings related to ContactAdapter -->
     <string name="selecte_collaborateur">Sélectionner les collaborateurs</string>
     <string name="ajout_collaborateur">Ajout un collaborateur</string>
 
     <!--Strings related to ContactActivity -->
-    <string name="error_select_user">Aucune personne sélectionner</string>
+    <string name="error_select_user">Aucune personne sélectionnée</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="menu_search">Recherche</string>
+    <!--Strings related to allcontactFragment -->
+    <string name="name_or_id">Nom ou Prénom ou id</string>
 
 
 
+    <!--    Permissions    -->
+    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
+    <string name="permission_required_toast">Location permission is required for this demo.</string>
+
+    <!--Strings related to Maps -->
+    <string name="no_iotp_select">Veullier entré un EOTP</string>
+    <string name="no_chantier_select">Aucun chantier sélectionnée</string>
+    <string name="cancel">Retour</string>
+    <string name="valider">Valider</string>
+    <string name="new_chantier">Nouveau chantier</string>
+    <string name="error_get_chantier">Probleme get Chantier</string>
+    <string name="error_send_Chantier">Probleme envoie du chantier</string>
+    <string name="iotp">EOTP</string>
+    <string name="address">Adresse</string>
+
+<string name="place_details">
+    <![CDATA[
+        <b>%1$s</b>
+        <br/>
+        <i>Place Id: %2$s</i>
+        <br/>
+        Address: %3$s
+        <br/>
+        Phone: %4$s
+        <br/>
+        Website: %5$s
+    ]]>
+    </string>
+
+
+    <!--Strings related to MypagerAdapter -->
+    <string name="recent_collaborateur">Collaborateur recent</string>
+    <string name="all_collaborateur">Tous les collaborateurs</string>
+
+    <!--Strings related to MypagerAdapter -->
+    <string name="no_chef_select">Aucun chef de chantier sélectionné</string>
+    <string name="choose_chef">Choisir chef de chantier</string>
 
 </resources>

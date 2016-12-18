@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#EEEEEE">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,11 +15,11 @@
             android:id="@+id/activity_choose_textview_name"
             android:layout_alignStart="@+id/activity_choose_button_open_contact"
             android:layout_alignEnd="@+id/activity_choose_button_open_contact"
-            android:hint="Aucun chef de chantier selectionner"
+            android:hint="@string/no_chef_select"
             android:textAlignment="center" />
 
         <Button
-            android:text="Choisir chef de chantier"
+            android:text="@string/choose_chef"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/activity_choose_textview_name"
