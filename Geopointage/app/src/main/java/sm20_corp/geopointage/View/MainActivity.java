@@ -123,8 +123,7 @@ public class MainActivity extends AppCompatActivity
             mIotpTextView.setText(mChantier.getIotp());
         }
         //DatabaseHandler.getInstance(getApplicationContext()).removeCuentTach();
-        if (DatabaseHandler.getInstance(getApplicationContext()).getCurentTach() != null)
-        {
+        if (DatabaseHandler.getInstance(getApplicationContext()).getCurentTach() != null) {
             final AlertDialog dialog;
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
             LayoutInflater inflater = getLayoutInflater();
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             iotp.setText(getString(R.string.iotp) + "  " + mChantier.getIotp());
             String tmp;
             String collaborateur2 = "";
-           // System.out.println("size = " + arrayListUser.size());
+            // System.out.println("size = " + arrayListUser.size());
             for (int i = 0; i < arrayListUser.size(); i++) {
                 tmp = arrayListUser.get(i).getLastName() + " " + arrayListUser.get(i).getFirstName() + " " + arrayListUser.get(i).getId() + "\n";
                 System.out.println("tmp = " + tmp);
@@ -164,14 +163,23 @@ public class MainActivity extends AppCompatActivity
             alertDialogBuilder.setPositiveButton(getString(R.string.resume), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
+                    mFloatingActionMenu.setVisibility(View.VISIBLE);
+                    mFloatingActionButtonPlay.setVisibility(View.GONE);
+                    createNotification("Start");
+                    TimeStamp timeStamp = new TimeStamp("pause", System.currentTimeMillis() / 1000);
+                    DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
+                    timeStamp = new TimeStamp("play", System.currentTimeMillis() / 1000);
+                    DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
                 }
 
             });
-
             alertDialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
+                    DatabaseHandler.getInstance(getApplicationContext()).removeTimeStamp();
+                    DatabaseHandler.getInstance(getApplicationContext()).removeCuentTach();
+                    mChantier = null;
                 }
 
             });
@@ -185,7 +193,6 @@ public class MainActivity extends AppCompatActivity
                 }
             });
             dialog.show();
-            System.out.println("fin");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -229,10 +236,6 @@ public class MainActivity extends AppCompatActivity
                             .make(coordinatorLayout, getString(R.string.no_adresse_select), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
-
-
-//                mFloatingActionMenu.setVisibility(View.VISIBLE);
-                //              mFloatingActionButtonPlay.setVisibility(View.GONE);
             }
         });
 
@@ -244,16 +247,14 @@ public class MainActivity extends AppCompatActivity
                 mFloatingActionMenu.close(true);
                 if (!pause) {
                     mFloatingActionButtonPause.setImageResource(R.drawable.ic_fab_play);
-                    //createNotification("pause");
+                    createNotification("pause");
                     pause = true;
-
                     TimeStamp timeStamp = new TimeStamp("pause", System.currentTimeMillis() / 1000);
                     DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
 
                 } else {
                     mFloatingActionButtonPause.setImageResource(R.drawable.ic_fab_pause);
-                    //createNotification("start");
-
+                    createNotification("start");
                     TimeStamp timeStamp = new TimeStamp("play", System.currentTimeMillis() / 1000);
                     DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
                     pause = false;
@@ -265,30 +266,6 @@ public class MainActivity extends AppCompatActivity
         mFloatingActionButtonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFloatingActionMenu.setVisibility(View.GONE);
-                mFloatingActionButtonPlay.setVisibility(View.VISIBLE);
-                mFloatingActionMenu.close(true);
-
-
-                TimeStamp timeStamp = new TimeStamp("stop", System.currentTimeMillis() / 1000);
-                DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
-                long resulat = TimeStampManager.timeStampToSecond(DatabaseHandler.getInstance(getApplicationContext()).getAllTimeStamp());
-                System.out.println("result  =  " + resulat);
-                DatabaseHandler.getInstance(getApplicationContext()).removeTimeStamp();
-
-                Tach tach = DatabaseHandler.getInstance(getApplicationContext()).getCurentTach();
-                tach.setTimeStamp(String.valueOf(resulat));
-
-                DatabaseHandler.getInstance(getApplicationContext()).addTach(tach);
-                DatabaseHandler.getInstance(getApplicationContext()).removeCuentTach();
-
-                System.out.println("------------------");
-                DatabaseHandler.getInstance(getApplicationContext()).getAllTach();
-                System.out.println("------------------");
-
-
-                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancel(1);
 
                 final AlertDialog dialog;
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -310,7 +287,7 @@ public class MainActivity extends AppCompatActivity
                 String tmp;
                 String collaborateur2 = "";
                 for (int i = 0; i < arrayListUser.size(); i++) {
-                    tmp = arrayListUser.get(i).getLastName() + " " + arrayListUser.get(i).getFirstName() + " " + arrayListUser.get(i).getId() +"\n";
+                    tmp = arrayListUser.get(i).getLastName() + " " + arrayListUser.get(i).getFirstName() + " " + arrayListUser.get(i).getId() + "\n";
                     collaborateur2 = collaborateur2.concat(tmp);
                 }
                 collaborateur.setText(collaborateur2);
@@ -324,7 +301,30 @@ public class MainActivity extends AppCompatActivity
                         System.out.println("collaborateur = " + finalCollaborateur);
                         System.out.println("comment = " + comment.getText());
                         if (!comment.getText().toString().isEmpty())
-                        sendComment(comment.getText().toString(), arrayListUser.get(0).getLastName(),arrayListUser.get(0).getFirstName(), mChantier.getIotp());
+                            sendComment(comment.getText().toString(), arrayListUser.get(0).getLastName(), arrayListUser.get(0).getFirstName(), mChantier.getIotp());
+
+                        mFloatingActionMenu.setVisibility(View.GONE);
+                        mFloatingActionButtonPlay.setVisibility(View.VISIBLE);
+                        mFloatingActionMenu.close(true);
+
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(1);
+                        TimeStamp timeStamp = new TimeStamp("stop", System.currentTimeMillis() / 1000);
+                        DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
+                        long resulat = TimeStampManager.timeStampToSecond(DatabaseHandler.getInstance(getApplicationContext()).getAllTimeStamp());
+                        System.out.println("result  =  " + resulat);
+                        DatabaseHandler.getInstance(getApplicationContext()).removeTimeStamp();
+
+                        Tach tach = DatabaseHandler.getInstance(getApplicationContext()).getCurentTach();
+                        tach.setTimeStamp(String.valueOf(resulat));
+
+                        DatabaseHandler.getInstance(getApplicationContext()).addTach(tach);
+                        DatabaseHandler.getInstance(getApplicationContext()).removeCuentTach();
+                        try {
+                            syncro();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 });
@@ -349,14 +349,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         guideButton = (Button) findViewById(R.id.content_main_button_guider);
         guideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mChantier != null) {
                     if (!mChantier.getAddress().isEmpty()) {
-                        System.out.println("clicl");
                         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + mChantier.getAddress());
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                         mapIntent.setPackage("com.google.android.apps.maps");
@@ -403,6 +401,7 @@ public class MainActivity extends AppCompatActivity
                             Intent i = new Intent(MainActivity.this, ContactActivity.class);
                             i.putExtra("choose", 0);
                             i.putExtra("chantier_extra", mChantier);
+                            i.putExtra("arrylist",arrayListUser);
                             startActivity(i);
                         }
                     }
@@ -410,7 +409,6 @@ public class MainActivity extends AppCompatActivity
         );
 
         mRecyclerView.setAdapter(contactAdapter);
-
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
@@ -425,19 +423,16 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("pos = " + viewHolder.getAdapterPosition());
                 System.out.println("size = " + arrayListUser.size());
 
-                // if (viewHolder.getAdapterPosition() != 0 && viewHolder.getAdapterPosition() != arrayListUser.size() - 1) {
                 contactAdapter.remove(viewHolder.getAdapterPosition());
                 System.out.println("name = " + arrayListUser.get(viewHolder.getAdapterPosition()).getLastName());
                 arrayListUser.remove(viewHolder.getAdapterPosition());
                 contactAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                //contactAdapter.notifyDataSetChanged();
                 contactAdapter.notifyItemRangeChanged(0, contactAdapter.getItemCount());
-                //  }
             }
 
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (viewHolder.getAdapterPosition() == 0 || viewHolder.getAdapterPosition() == arrayListUser.size() - 1)
+                if (viewHolder.getAdapterPosition() == 0 || viewHolder.getAdapterPosition() == arrayListUser.size() - 1 || DatabaseHandler.getInstance(getApplicationContext()).getCurentTach() != null)
                     return 0;
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
@@ -487,7 +482,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_logout) {
             System.out.println("boolen = " + DatabaseHandler.getInstance(this).removeChef());
-
+            DatabaseHandler.getInstance(this).removeTimeStamp();
+            DatabaseHandler.getInstance(this).removeCuentTach();
             Intent i = new Intent(MainActivity.this, ChooseActivity.class);
             startActivity(i);
         }
@@ -498,6 +494,9 @@ public class MainActivity extends AppCompatActivity
 
     public void createNotification(String title) {
         Bitmap icon = ((BitmapDrawable) getResources().getDrawable(R.drawable.logo)).getBitmap();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String currentDateandTime = sdf.format(new Date());
+        title = title.concat("   " + currentDateandTime);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(MainActivity.this)
                         .setLargeIcon(icon)
@@ -539,7 +538,7 @@ public class MainActivity extends AppCompatActivity
             System.out.println("parse  = " + parser);
             System.out.println("token  = " + token);
 
-            tmp = DatabaseHandler.getInstance(getApplicationContext()).getUser("","",token, 0);
+            tmp = DatabaseHandler.getInstance(getApplicationContext()).getUser("", "", token, 0);
             System.out.println("tmp user = " + tmp.toString());
             arrayListTmp.add(tmp);
             parser.nextToken("|");
@@ -547,36 +546,47 @@ public class MainActivity extends AppCompatActivity
         return arrayListTmp;
     }
 
-   // [{login: 'id001', address: '1 rue blabla', date:'10-12-2016', numberOfHours: '2', worker: { firstName:'Samuel', lastName: 'JOSET'} }, {login: 'id002', address: '6 rue ha', date:'2-10-2006', numberOfHours: '4', worker: { firstName:'David', lastName: 'Haga'} }]
+    // [{login: 'id001', address: '1 rue blabla', date:'10-12-2016', numberOfHours: '2', worker: { firstName:'Samuel', lastName: 'JOSET'} }, {login: 'id002', address: '6 rue ha', date:'2-10-2006', numberOfHours: '4', worker: { firstName:'David', lastName: 'Haga'} }]
     //[{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"2","worker":{"firstName":"redouane","LastName":"Messara"}},{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"3","worker":{"firstName":"redouane","LastName":"Messara"}},{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"1","worker":{"firstName":"redouane","LastName":"Messara"}},{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"3","worker":{"firstName":"redouane","LastName":"Messara"}},{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"1","worker":{"firstName":"redouane","LastName":"Messara"}},{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"1","worker":{"firstName":"redouane","LastName":"Messara"}},{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"1","worker":{"firstName":"redouane","LastName":"Messara"}},{"login":"1234567890","address":"27 Rue Serpente, 92700 Colombes","date":"18-12-2016","numberOfHours":"2","worker":{"firstName":"redouane","LastName":"Messara"}}]
 
     public void syncro() throws JSONException {
         JSONArray body = new JSONArray();
         JSONObject tmp = new JSONObject();
-        JSONObject tmpChef = new JSONObject();
+        JSONArray tmpWorker = new JSONArray();
+        JSONObject  tmpUser = new JSONObject();
+
         System.out.println("parse str");
+
         ArrayList<Tach> arrayListTach = DatabaseHandler.getInstance(getApplicationContext()).getAllTach();
-        Date date;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String currentDateandTime = sdf.format(new Date());
-        for (int i = 0; i < arrayListTach.size(); i++) {
-            ArrayList<User> arrayListUser = parseStr(arrayListTach.get(i).getIdCollaborateur());
-            tmp.put("login", arrayListTach.get(i).getIotp());
-            tmp.put("address", arrayListTach.get(i).getAddress());
-            tmp.put("date", currentDateandTime);
-            tmp.put("numberOfHours", arrayListTach.get(i).getTimeStamp());
-            tmpChef.put("firstName", DatabaseHandler.getInstance(getApplicationContext()).getChef().getFirstName());
-            tmpChef.put("LastName", DatabaseHandler.getInstance(getApplicationContext()).getChef().getLastName());
-            tmp.put("worker", tmpChef);
-            body.put(tmp);
-            tmp = new JSONObject();
+        if (arrayListTach != null && arrayListTach.size() > 0) {
+            Date date;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String currentDateandTime = sdf.format(new Date());
+            for (int i = 0; i < arrayListTach.size(); i++) {
+                ArrayList<User> arrayListUser = parseStr(arrayListTach.get(i).getIdCollaborateur());
+                tmp.put("login", arrayListTach.get(i).getIotp());
+                tmp.put("address", arrayListTach.get(i).getAddress());
+                tmp.put("date", currentDateandTime);
+                tmp.put("numberOfHours", arrayListTach.get(i).getTimeStamp());
+
+                for(int y = 0; y < arrayListUser.size() ; y++) {
+                    tmpUser.put("firstName", arrayListUser.get(y).getFirstName());
+                    tmpUser.put("LastName", arrayListUser.get(y).getLastName());
+                    tmpWorker.put(tmpUser);
+                    tmpUser = new JSONObject();
+                }
+
+                tmp.put("worker", tmpWorker);
+                body.put(tmp);
+                tmp = new JSONObject();
+            }
+            System.out.println("body = " + body.toString());
+            sendTach(body.toString());
         }
-        System.out.println("body = " + body.toString());
-        sendTach(body.toString());
     }
 
-    private void sendComment(String comment,String lastName, String firstName, String iotp) {
-        ApiManager.get().sendComment(iotp,comment, firstName, lastName).enqueue(new Callback<Message>() {
+    private void sendComment(String comment, String lastName, String firstName, String iotp) {
+        ApiManager.get().sendComment(iotp, comment, firstName, lastName).enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 System.out.println("code = " + response.raw().toString());
@@ -584,19 +594,19 @@ public class MainActivity extends AppCompatActivity
                     System.out.println("comment = " + response.body().toString());
 
                 } else {
-                    System.out.println("not sucess SendComment = " + response.code());
-                    /*Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, getString(R.string.error_send_user), Snackbar.LENGTH_LONG);
-                    snackbar.show();*/
+                    System.out.println("Not sucess SendComment = " + response.code());
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, getString(R.string.error_send_comment), Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
                 System.out.println("On failure sendComment : " + t.getMessage());
-                /*Snackbar snackbar = Snackbar
+                Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG);
-                snackbar.show();*/
+                snackbar.show();
             }
         });
     }
@@ -607,11 +617,12 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<Message> call, Response<Message> response) {
                 System.out.println("code = " + response.raw().toString());
                 if (response.isSuccessful()) {
-                    System.out.println("Tach = " + response.body().toString());
-
                     Snackbar snackbar = Snackbar
                             .make(coordinatorLayout, getString(R.string.send_tach_ok), Snackbar.LENGTH_LONG);
                     snackbar.show();
+                    DatabaseHandler.getInstance(getApplicationContext()).removeCuentTach();
+                    DatabaseHandler.getInstance(getApplicationContext()).removeTach();
+                    DatabaseHandler.getInstance(getApplicationContext()).removeTimeStamp();
                 } else {
                     System.out.println("not sucess SendTach = " + response.code());
                     Snackbar snackbar = Snackbar

@@ -30,6 +30,7 @@
     <string name="no_adresse_select">Aucune adresse sélectionée</string>
     <string name="logout">Deconnection</string>
     <string name="error_send_tach">Probleme envoie des tâches</string>
+    <string name="error_send_comment">Probleme envoie des commentaires</string>
     <string name="send_tach_ok">Tâches envoié</string>
     <string name="tach_found">Tâche trouvé</string>
     <string name="resume">Reprendre</string>

@@ -84,7 +84,6 @@ public class AllContactFragment extends Fragment {
                             user = mContactAdapter.getSelectedItem(position, 1).get(0);
                             if (user != null)
                                 ((ContactActivity) getActivity()).setChef(user);
-
                         }
                         mContactAdapter.notifyDataSetChanged();
 
@@ -141,7 +140,7 @@ public class AllContactFragment extends Fragment {
                     System.out.println("user = " + response.body().getUser().toString());
                     ArrayList<User> tmp = response.body().getUser();
                     for (int i = 0; i < tmp.size(); i++) {
-                        System.out.println("user = " + tmp.get(i).toString());
+                        //System.out.println("user = " + tmp.get(i).toString());
                         tmp.get(i).setVisibility(true);
                         if (DatabaseHandler.getInstance(getContext()).getUser("", "", tmp.get(i).getId(), 0) == null) {
                             System.out.println("user add");

@@ -32,7 +32,7 @@ import sm20_corp.geopointage.R;
  * Geopointage
  */
 
-public class ContactActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class ContactActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FloatingActionButton floatingActionButton;
     private ImageView arrowBack;
@@ -62,6 +62,7 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
     private User chef;
     private ArrayList<User> arrayListCollaborateur = new ArrayList<>();
     private Chantier mChantier;
+    private ImageView micId;
 
     public void setChef(User chef) {
         this.chef = chef;
@@ -74,6 +75,7 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
     public void setArrayListCollaborateur(ArrayList<User> arrayListCollaborateur) {
         this.arrayListCollaborateur = arrayListCollaborateur;
     }
+
     public void addArrayListCollaborateur(User user) {
         this.arrayListCollaborateur.add(user);
     }
@@ -88,9 +90,14 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
         if (intent != null) {
             choose = intent.getIntExtra("choose", 1);
             mChantier = intent.getParcelableExtra("chantier_extra");
+            arrayListCollaborateur = intent.getParcelableArrayListExtra("arrylist");
+            if (arrayListCollaborateur != null && !arrayListCollaborateur.isEmpty()) {
+                System.out.println("array = " + arrayListCollaborateur.toString());
+            }
+
+
             mMessage = intent.getStringExtra("message");
-            if (mMessage != null && !mMessage.isEmpty())
-            {
+            if (mMessage != null && !mMessage.isEmpty()) {
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, mMessage, Snackbar.LENGTH_LONG);
                 snackbar.show();
@@ -111,6 +118,31 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    System.out.println("hey 0");
+                    micId = (ImageView) findViewById(R.id.activity_contact_imageview_mic_lastname);
+                    micId.setVisibility(View.GONE);
+                } else {
+                    System.out.println("hey 1");
+                    micId = (ImageView) findViewById(R.id.activity_contact_imageview_mic_lastname);
+                    micId.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), ContactActivity.this);
         mPager.setAdapter(mPagerAdapter);
 
@@ -133,6 +165,10 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
 
 
         arrowBack = (ImageView) findViewById(R.id.activity_contact_imageview_arrow_back);
+        if (choose == 1) {
+            arrowBack.setImageResource(R.drawable.ic_done_white_24dp);
+        }
+
         arrowBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,16 +178,22 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
                     i.putExtra("chantier_extra", mChantier);
                     startActivity(i);
                 } else if (choose == 1) {
-                    Intent i = new Intent(ContactActivity.this, ChooseActivity.class);
-                    //i.putExtra("user_extra", mUser);
-                    startActivity(i);
+                    if (chef != null) {
+                        DatabaseHandler.getInstance(getApplicationContext()).updateChef(chef);
+                        Intent i = new Intent(ContactActivity.this, MainActivity.class);
+                        startActivity(i);
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(coordinatorLayout, getString(R.string.error_select_user), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
                 }
             }
         });
 
         done = (ImageView) findViewById(R.id.activity_contact_imageview_done);
-        if (choose == 0)
-            done.setVisibility(View.GONE);
+        //  if (choose == 0)
+        done.setVisibility(View.GONE);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,18 +212,17 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
                         i.putExtra("user_extra", arrayListCollaborateur);
                         i.putExtra("chantier_extra", mChantier);
                         startActivity(i);
-                    }
-                    else {
+                    } else {
                         Snackbar snackbar = Snackbar
                                 .make(coordinatorLayout, getString(R.string.error_select_user), Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
-
                 }
             }
         });
         mPager.setCurrentItem(1);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -191,33 +232,13 @@ public class ContactActivity extends ActionBarActivity implements NavigationView
             super.onBackPressed();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         SplashScreenActivity.activityResumed();
     }
 
-   /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.main, menu);
-        SearchManager searchManager = (SearchManager) getActivity().getApplicationContext().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mContactAdapter.filter(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                mContactAdapter.filter(newText);
-                return true;
-            }
-        });
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

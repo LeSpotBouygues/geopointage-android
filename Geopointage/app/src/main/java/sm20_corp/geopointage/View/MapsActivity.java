@@ -290,18 +290,6 @@ public class MapsActivity extends AppCompatActivity implements
             adress.setText(mMarker.getTitle());
             final EditText iotp = (EditText) dialogView.findViewById(R.id.dialog_edittext_iotp);
 
-                /*    final ImageView micIotp = (ImageView) dialogView.findViewById(R.id.dialog_imageview_mic_iotp);
-                    micIotp.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.iotp));
-                            startActivityForResult(intent, 1);
-                        }
-                    });*/
-
             alertDialogBuilder.setPositiveButton(getString(R.string.valider), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
@@ -350,8 +338,8 @@ public class MapsActivity extends AppCompatActivity implements
         mMap.setOnMarkerDragListener(this);
         mMap.setOnMarkerClickListener(this);
         enableMyLocation();
-        //LatLng paris = new LatLng(48.866667, 2.333333);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(paris, 11));
+        LatLng paris = new LatLng(48.866667, 2.333333);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(paris, 10));
 
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setMapToolbarEnabled(false);

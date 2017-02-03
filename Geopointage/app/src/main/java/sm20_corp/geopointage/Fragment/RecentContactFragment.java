@@ -52,6 +52,7 @@ public class RecentContactFragment extends Fragment {
         if (arrayList == null) {
             arrayList = new ArrayList<User>();
         }
+
         mContactAdapter = new ContactAdapter(arrayList, 0, getActivity());
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {

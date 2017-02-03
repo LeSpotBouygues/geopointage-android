@@ -37,7 +37,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         mContext = context;
         mOption = option;
         if (myDataset != null) {
-            if (mOption == 1) {
+            if (mOption == 1 && !myDataset.get(myDataset.size() - 1).getId().equals("")) {
                 User tmp = new User("", "", "");
                 myDataset.add(tmp);
             }

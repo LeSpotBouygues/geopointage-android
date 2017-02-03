@@ -174,7 +174,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_USER_ID, user.getId());
 
         long idDb = db.insert(TABLE_USER, null, values);
-        System.out.println("user add " + cnt + " (" + idDb + ")lastName = " + user.getLastName() + "\nfirstName = " + user.getFirstName() + "\n id = " + user.getId());
+       // System.out.println("user add " + cnt + " (" + idDb + ")lastName = " + user.getLastName() + "\nfirstName = " + user.getFirstName() + "\n id = " + user.getId());
 
         db.close(); // Closing database connection
         return (Long.toString(cnt));
@@ -196,10 +196,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         User user = null;
         if (cursor != null && cursor.moveToFirst()) {
-            System.out.println("iddb = " + cursor.getString(0));
+            /*System.out.println("iddb = " + cursor.getString(0));
             System.out.println("lastname = " + cursor.getString(1));
             System.out.println("firstname = " + cursor.getString(2));
-            System.out.println("id = " + cursor.getString(3));
+            System.out.println("id = " + cursor.getString(3));*/
             user = new User(cursor.getString(1), cursor.getString(2), cursor.getString(3));
             cursor.close();
             // return contact
@@ -228,21 +228,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         final ArrayList<User> arrayListUser = new ArrayList<User>();
         if (cursor != null && cursor.moveToFirst()) {
             int i = 0;
-            System.out.println("i = " + i);
+            /*System.out.println("i = " + i);
             System.out.println("iddb = " + cursor.getString(0));
             System.out.println("lastname = " + cursor.getString(1));
             System.out.println("firstname = " + cursor.getString(2));
-            System.out.println("id = " + cursor.getString(3));
+            System.out.println("id = " + cursor.getString(3));*/
             user = new User(cursor.getString(1), cursor.getString(2), cursor.getString(3));
             arrayListUser.add(user);
             i++;
 
             while (cursor.moveToNext()) {
-                System.out.println("i = " + i);
+               /* System.out.println("i = " + i);
                 System.out.println("iddb = " + cursor.getString(0));
                 System.out.println("lastname = " + cursor.getString(1));
                 System.out.println("firstname = " + cursor.getString(2));
-                System.out.println("id = " + cursor.getString(3));
+                System.out.println("id = " + cursor.getString(3));*/
                 user = new User(cursor.getString(1), cursor.getString(2), cursor.getString(3));
                 arrayListUser.add(user);
                 i++;
@@ -369,7 +369,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(KEY_RECENT_PLACE, cnt);
             long idDb = db.insert(TABLE_RECENT, null, values);
             System.out.println("add recent <5");
-            System.out.println(user.toString());
+            //System.out.println(user.toString());
             db.close(); // Closing database connection
             return (Long.toString(cnt));
         } else {
@@ -468,7 +468,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     }
                 });
             }
-            System.out.println("getAllrecent  = " + arrayListUser.size() + "  " + arrayListUser.toString());
+            //System.out.println("getAllrecent  = " + arrayListUser.size() + "  " + arrayListUser.toString());
             return arrayListUser;
         }
         System.out.println("aucun getAllrecent trouvé");
@@ -518,7 +518,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TIME_TIMESTAMP, timeStamp.getTimeStamp());
         long idDb = db.insert(TABLE_TIME, null, values);
         System.out.println("time add " + cnt + " idDb" + idDb);
-        System.out.println(timeStamp.toString());
+        //System.out.println(timeStamp.toString());
         db.close(); // Closing database connection
         return (Long.toString(cnt));
     }
@@ -547,7 +547,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 i++;
             }
             cursor.close();
-            System.out.println("getallTimeStamp" + arrayListTimeStamp.toString());
+            //System.out.println("getallTimeStamp" + arrayListTimeStamp.toString());
             return arrayListTimeStamp;
         }
         System.out.println("aucun getAlltimeStamp trouvé");
@@ -694,5 +694,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         System.out.println("aucun allTache trouvé");
         return (null);
+    }
+
+    public boolean removeTach() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_TACH, null, null) > 0;
     }
 }
