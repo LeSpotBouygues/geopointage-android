@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity
                 public void onClick(DialogInterface arg0, int arg1) {
                     mFloatingActionMenu.setVisibility(View.VISIBLE);
                     mFloatingActionButtonPlay.setVisibility(View.GONE);
-                    createNotification("Start");
+                    createNotification("Debut à");
                     TimeStamp timeStamp = new TimeStamp("pause", System.currentTimeMillis() / 1000);
                     DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
                     timeStamp = new TimeStamp("play", System.currentTimeMillis() / 1000);
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity
                         && !arrayListUser.isEmpty()) {
                     mFloatingActionMenu.setVisibility(View.VISIBLE);
                     mFloatingActionButtonPlay.setVisibility(View.GONE);
-                    createNotification("Start");
+                    createNotification("Debut à");
 
                     TimeStamp timeStamp = new TimeStamp("play", System.currentTimeMillis() / 1000);
                     DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
@@ -247,14 +247,14 @@ public class MainActivity extends AppCompatActivity
                 mFloatingActionMenu.close(true);
                 if (!pause) {
                     mFloatingActionButtonPause.setImageResource(R.drawable.ic_fab_play);
-                    createNotification("pause");
+                    createNotification("Pause à");
                     pause = true;
                     TimeStamp timeStamp = new TimeStamp("pause", System.currentTimeMillis() / 1000);
                     DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
 
                 } else {
                     mFloatingActionButtonPause.setImageResource(R.drawable.ic_fab_pause);
-                    createNotification("start");
+                    createNotification("Debut à");
                     TimeStamp timeStamp = new TimeStamp("play", System.currentTimeMillis() / 1000);
                     DatabaseHandler.getInstance(getApplicationContext()).addTime(timeStamp);
                     pause = false;
@@ -356,8 +356,15 @@ public class MainActivity extends AppCompatActivity
                 if (mChantier != null) {
                     if (!mChantier.getAddress().isEmpty()) {
                         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + mChantier.getAddress());
+                        gmmIntentUri = Uri.parse("geo:0,0?q=" +mChantier.getAddress());
+
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
+                        //mapIntent.setPackage("com.google.android.apps.maps");
+
+                       /*mapIntent.setData(Uri.parse("geo:" + mChantier.getLat() + "," +
+                               mChantier.getLng() + "?q=" + getStreet() + "+" +
+                                getHousenumber() + "+" + getPostalcode() + "+" +
+                                getCity()));*/
                         startActivity(mapIntent);
                     } else {
                         Snackbar snackbar = Snackbar
@@ -496,12 +503,12 @@ public class MainActivity extends AppCompatActivity
         Bitmap icon = ((BitmapDrawable) getResources().getDrawable(R.drawable.logo)).getBitmap();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String currentDateandTime = sdf.format(new Date());
-        title = title.concat("   " + currentDateandTime);
+        title = title.concat(" " + currentDateandTime);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(MainActivity.this)
                         .setLargeIcon(icon)
                         .setSmallIcon(R.drawable.logo)
-                        .setContentTitle("Geopoitage")
+                        .setContentTitle(getString(R.string.app_name))
                         .setOngoing(true)
                         .setContentText(title);
         // Creates an explicit intent for an Activity in your app
@@ -568,17 +575,16 @@ public class MainActivity extends AppCompatActivity
                 tmp.put("address", arrayListTach.get(i).getAddress());
                 tmp.put("date", currentDateandTime);
                 tmp.put("numberOfHours", arrayListTach.get(i).getTimeStamp());
-
                 for(int y = 0; y < arrayListUser.size() ; y++) {
                     tmpUser.put("firstName", arrayListUser.get(y).getFirstName());
-                    tmpUser.put("LastName", arrayListUser.get(y).getLastName());
+                    tmpUser.put("lastName", arrayListUser.get(y).getLastName());
                     tmpWorker.put(tmpUser);
                     tmpUser = new JSONObject();
                 }
-
-                tmp.put("worker", tmpWorker);
+                tmp.put("workers", tmpWorker);
                 body.put(tmp);
                 tmp = new JSONObject();
+                tmpWorker = new JSONArray();
             }
             System.out.println("body = " + body.toString());
             sendTach(body.toString());
